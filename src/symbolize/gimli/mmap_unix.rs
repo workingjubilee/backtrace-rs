@@ -1,5 +1,6 @@
 use super::mystd::fs::File;
 use super::mystd::os::unix::prelude::*;
+use core::ffi::c_void;
 use core::ops::Deref;
 use core::ptr;
 use core::slice;
@@ -10,7 +11,7 @@ use libc::mmap as mmap64;
 use libc::mmap64;
 
 pub struct Mmap {
-    ptr: *mut libc::c_void,
+    ptr: *mut c_void,
     len: usize,
 }
 

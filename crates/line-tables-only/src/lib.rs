@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use backtrace::Backtrace;
-    use libc::c_void;
+    use core::ffi::c_void;
     use std::path::Path;
     use std::ptr::addr_of_mut;
 
