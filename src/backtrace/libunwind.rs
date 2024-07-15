@@ -205,7 +205,7 @@ mod uw {
             #[cfg(all(target_os = "linux", target_arch = "s390x"))]
             pub unsafe fn get_sp(ctx: *mut _Unwind_Context) -> libc::uintptr_t {
                 extern "C" {
-                    pub fn _Unwind_GetGR(ctx: *mut _Unwind_Context, index: libc::c_int) -> libc::uintptr_t;
+                    pub fn _Unwind_GetGR(ctx: *mut _Unwind_Context, index: core::ffi::c_int) -> libc::uintptr_t;
                 }
                 _Unwind_GetGR(ctx, 15)
             }
@@ -243,7 +243,7 @@ mod uw {
                 _UVRSD_DOUBLE = 5,
             }
 
-            type _Unwind_Word = libc::c_uint;
+            type _Unwind_Word = core::ffi::c_uint;
             extern "C" {
                 fn _Unwind_VRS_Get(
                     ctx: *mut _Unwind_Context,

@@ -7,7 +7,7 @@ use super::mystd::env;
 use super::mystd::ffi::{CStr, OsStr};
 use super::mystd::os::unix::prelude::*;
 use super::{Library, LibrarySegment, OsString, Vec};
-use core::ffi::c_void;
+use core::ffi::{c_int, c_void};
 use core::slice;
 
 pub(super) fn native_libraries() -> Vec<Library> {
@@ -42,7 +42,7 @@ unsafe extern "C" fn callback(
     info: *mut libc::dl_phdr_info,
     _size: libc::size_t,
     vec: *mut c_void,
-) -> libc::c_int {
+) -> c_int {
     let info = &*info;
     let libs = &mut *vec.cast::<Vec<Library>>();
     let is_main_prog = info.dlpi_name.is_null() || *info.dlpi_name == 0;

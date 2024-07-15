@@ -1,7 +1,7 @@
+use core::ffi::c_char;
 use core::fmt::{self, Write};
 use core::mem::{size_of, transmute};
 use core::slice::from_raw_parts;
-use libc::c_char;
 
 extern "C" {
     // dl_iterate_phdr takes a callback that will receive a dl_phdr_info pointer

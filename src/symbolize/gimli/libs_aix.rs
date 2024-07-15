@@ -6,6 +6,7 @@ use super::mystd::os::unix::prelude::*;
 use super::xcoff;
 use super::{Library, LibrarySegment, Vec};
 use alloc::vec;
+use core::ffi::c_char;
 use core::mem;
 
 const EXE_IMAGE_BASE: u64 = 0x100000000;
@@ -20,7 +21,7 @@ pub(super) fn native_libraries() -> Vec<Library> {
         loop {
             if libc::loadquery(
                 libc::L_GETINFO,
-                buffer.as_mut_ptr().cast::<libc::c_char>(),
+                buffer.as_mut_ptr().cast::<c_char>(),
                 (mem::size_of::<libc::ld_info>() * buffer.len()) as u32,
             ) != -1
             {
@@ -41,7 +42,7 @@ pub(super) fn native_libraries() -> Vec<Library> {
         let mut current = buffer.as_mut_ptr();
         loop {
             let text_base = (*current).ldinfo_textorg as usize;
-            let filename_ptr: *const libc::c_char = &(*current).ldinfo_filename[0];
+            let filename_ptr: *const c_char = &(*current).ldinfo_filename[0];
             let bytes = CStr::from_ptr(filename_ptr).to_bytes();
             let member_name_ptr = filename_ptr.offset((bytes.len() + 1) as isize);
             let mut filename = OsStr::from_bytes(bytes).to_owned();
@@ -67,7 +68,7 @@ pub(super) fn native_libraries() -> Vec<Library> {
                 break;
             }
             current = current
-                .cast::<libc::c_char>()
+                .cast::<c_char>()
                 .offset((*current).ldinfo_next as isize)
                 .cast::<libc::ld_info>();
         }

@@ -2,7 +2,7 @@ use super::mystd::borrow::ToOwned;
 use super::mystd::ffi::{CStr, OsStr};
 use super::mystd::os::unix::prelude::*;
 use super::{Library, LibrarySegment, Vec};
-use core::ffi::c_void;
+use core::ffi::{c_char, c_int, c_ulong, c_void};
 use core::mem;
 use object::NativeEndian;
 
@@ -14,19 +14,19 @@ type PHdr = ProgramHeader<NativeEndian>;
 
 #[repr(C)]
 struct LinkMap {
-    l_addr: libc::c_ulong,
-    l_name: *const libc::c_char,
+    l_addr: c_ulong,
+    l_name: *const c_char,
     l_ld: *const c_void,
     l_next: *const LinkMap,
     l_prev: *const LinkMap,
-    l_refname: *const libc::c_char,
+    l_refname: *const c_char,
 }
 
 const RTLD_SELF: *const c_void = -3isize as *const c_void;
-const RTLD_DI_LINKMAP: libc::c_int = 2;
+const RTLD_DI_LINKMAP: c_int = 2;
 
 extern "C" {
-    fn dlinfo(handle: *const c_void, request: libc::c_int, p: *mut c_void) -> libc::c_int;
+    fn dlinfo(handle: *const c_void, request: c_int, p: *mut c_void) -> c_int;
 }
 
 pub(super) fn native_libraries() -> Vec<Library> {
